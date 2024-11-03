@@ -16,6 +16,8 @@ dependencies:
   flutter_riverpod: ^2.6.1
   dio: ^5.7.0
   cached_network_image: ^3.4.1
+  shared_preferences: ^2.3.2
+  collection: ^1.18.0
 
 dev_dependencies:
   flutter_test:

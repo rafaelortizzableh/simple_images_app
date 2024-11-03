@@ -30,7 +30,7 @@ class PhotoSearchController extends StateNotifier<PhotoSearchState> {
   static const _tag = 'PhotoSearchController';
 
   Future<void> searchPhotos({
-    required String query,
+    String? query,
     int? page,
   }) async {
     if (state.isLoading) return;
@@ -44,10 +44,11 @@ class PhotoSearchController extends StateNotifier<PhotoSearchState> {
         isLoading: pageToFetch == 1,
         failure: null,
         isLoadingMore: pageToFetch > 1,
-      );
-      log('Searching photos for query: $query on page: $pageToFetch');
-      final photos = await _photosService.searchPhotos(
         query: query,
+      );
+      log('Searching photos for query: ${state.query} on page: $pageToFetch');
+      final photos = await _photosService.searchPhotos(
+        query: query ?? state.query,
         page: pageToFetch,
       );
       if (!mounted) return;

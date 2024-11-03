@@ -56,12 +56,14 @@ class PhotosPage extends ConsumerWidget {
           ),
           if (isLoading) ...{
             const SliverFillRemaining(
+              hasScrollBody: false,
               child: Center(
                 child: CircularProgressIndicator.adaptive(),
               ),
             ),
           } else if (hasError) ...{
             SliverFillRemaining(
+              hasScrollBody: false,
               child: GenericError(
                 errorText: ref.watch(
                   photosProvider

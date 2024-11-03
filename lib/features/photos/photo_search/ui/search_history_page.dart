@@ -36,6 +36,7 @@ class SearchHistoryPage extends ConsumerWidget {
           ),
           if (previousSearchQueries.isEmpty) ...{
             const SliverFillRemaining(
+              hasScrollBody: false,
               child: _EmptySearchHistory(),
             ),
           } else ...{

@@ -40,6 +40,7 @@ class _PhotoSearchPageConsumerState extends ConsumerState<PhotoSearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     _listenToQueryUpdatesAndRateLimitErrors();
 
     final photoSearchPhotosState = ref.watch(
@@ -54,84 +55,93 @@ class _PhotoSearchPageConsumerState extends ConsumerState<PhotoSearchPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Search Photos'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.history),
-            onPressed: _navigateToSearchHistoryPage,
-          ),
-        ],
+        toolbarHeight: 0,
+        automaticallyImplyLeading: false,
       ),
-      body: Padding(
-        padding: AppConstants.padding16,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Hero(
-              tag: 'search_photos_bar',
-              child: CupertinoSearchTextField(
-                placeholder: 'Search for photos',
-                autofocus: true,
-                controller: _searchController,
-                style: TextStyle(
-                  color: context.theme.brightness == Brightness.light
-                      ? Colors.black
-                      : Colors.white,
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar.large(
+            centerTitle: true,
+            title: Text(
+              'Search Photos',
+              textAlign: TextAlign.center,
+              style: theme.textTheme.headlineSmall?.copyWith(
+                color: theme.foregroundColor,
+              ),
+            ),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.history),
+                onPressed: _navigateToSearchHistoryPage,
+              ),
+            ],
+          ),
+          SliverPadding(
+            padding: AppConstants.padding16,
+            sliver: SliverList.list(
+              children: [
+                Hero(
+                  tag: 'search_photos_bar',
+                  child: CupertinoSearchTextField(
+                    placeholder: 'Search for photos',
+                    autofocus: true,
+                    controller: _searchController,
+                    style: TextStyle(
+                      color: context.theme.brightness == Brightness.light
+                          ? Colors.black
+                          : Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (hasFailure) ...{
+            SliverFillRemaining(
+              child: Center(
+                child: GenericError(
+                  errorText: failure!.message,
+                  onRetry: () {
+                    ref.read(photoSearchProvider.notifier).searchPhotos(
+                          query: ref.read(photoSearchProvider).query,
+                          page: 1,
+                        );
+                  },
                 ),
               ),
             ),
-            if (hasFailure) ...{
-              Expanded(
-                child: Center(
-                  child: GenericError(
-                    errorText: failure!.message,
-                    onRetry: () {
-                      ref.read(photoSearchProvider.notifier).searchPhotos(
-                            query: ref.read(photoSearchProvider).query,
-                            page: 1,
-                          );
-                    },
-                  ),
+          } else if (isLoading) ...{
+            const SliverFillRemaining(
+              child: Center(
+                child: CircularProgressIndicator.adaptive(),
+              ),
+            ),
+          } else if (hasNotSearchedForPhotos) ...{
+            const SliverFillRemaining(
+              hasScrollBody: false,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.search,
+                      size: AppConstants.spacing48,
+                    ),
+                    AppSpacingWidgets.verticalSpacing16,
+                    Text(
+                      'Search for photos',
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
               ),
-            } else if (isLoading) ...{
-              const Expanded(
-                child: Center(
-                  child: CircularProgressIndicator.adaptive(),
-                ),
-              ),
-            } else if (hasNotSearchedForPhotos) ...{
-              const Expanded(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.search,
-                        size: AppConstants.spacing48,
-                      ),
-                      AppSpacingWidgets.verticalSpacing24,
-                      Text('Search for photos', textAlign: TextAlign.center),
-                    ],
-                  ),
-                ),
-              ),
-            } else ...{
-              Expanded(
-                child: GridView.builder(
-                  padding: const EdgeInsets.only(
-                    top: AppConstants.spacing32,
-                    right: AppConstants.spacing16,
-                    left: AppConstants.spacing16,
-                  ),
-                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 300,
-                    childAspectRatio: 0.69,
-                    mainAxisSpacing: AppConstants.spacing8,
-                    crossAxisSpacing: AppConstants.spacing8,
-                  ),
-                  itemCount: photos.length + 1,
-                  itemBuilder: (context, index) {
+            )
+          } else ...{
+            SliverPadding(
+              padding: AppConstants.padding16,
+              sliver: SliverGrid(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
                     final isLastItem = index == photos.length;
                     if (isLastItem) {
                       if (!hasMore) {
@@ -139,9 +149,7 @@ class _PhotoSearchPageConsumerState extends ConsumerState<PhotoSearchPage> {
                       }
                       return LoadMoreItem(
                         onShow: () {
-                          ref.read(photoSearchProvider.notifier).searchPhotos(
-                                query: ref.read(photoSearchProvider).query,
-                              );
+                          ref.read(photoSearchProvider.notifier).searchPhotos();
                         },
                         key: Key(
                           'load_more_search_photos_page_length_${photos.length}',
@@ -171,11 +179,18 @@ class _PhotoSearchPageConsumerState extends ConsumerState<PhotoSearchPage> {
                       },
                     );
                   },
+                  childCount: photos.length + 1,
+                ),
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 300,
+                  childAspectRatio: 0.69,
+                  mainAxisSpacing: AppConstants.spacing8,
+                  crossAxisSpacing: AppConstants.spacing8,
                 ),
               ),
-            },
-          ],
-        ),
+            ),
+          },
+        ],
       ),
     );
   }

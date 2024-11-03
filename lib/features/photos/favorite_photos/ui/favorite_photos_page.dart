@@ -74,6 +74,7 @@ class FavoritePhotosPage extends ConsumerWidget {
             ),
           } else ...{
             const SliverFillRemaining(
+              hasScrollBody: false,
               child: _NoPhotosYet(),
             ),
           },

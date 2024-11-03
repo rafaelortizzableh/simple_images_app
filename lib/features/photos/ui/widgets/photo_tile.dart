@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:simple_images_app/core/core.dart';
 
 import '../../../features.dart';
@@ -30,6 +31,7 @@ class PhotoItem extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () {
+          HapticFeedback.mediumImpact().ignore();
           Navigator.of(context).pushNamed(
             PhotoDetailPage.routePath,
             arguments: photo.id,

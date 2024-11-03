@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../app.dart';
 import '../../../core/core.dart';
 import '../../features.dart';
 
@@ -25,61 +24,13 @@ class PhotosPage extends ConsumerWidget {
     final isLoading = ref.watch(
       photosProvider.select((value) => value.isLoading),
     );
-    final isLightTheme = ref.watch(
-      themeModeControllerProvider.select((value) => value == ThemeMode.light),
-    );
 
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0,
         automaticallyImplyLeading: false,
       ),
-      drawer: Drawer(
-        child: StatusBarWrapper(
-          statusBarStyle:
-              isLightTheme ? StatusBarStyle.dark : StatusBarStyle.light,
-          child: SafeArea(
-            child: Padding(
-              padding: AppConstants.padding24,
-              child: Column(
-                children: [
-                  ListTile(
-                    leading: Icon(
-                      isLightTheme ? Icons.sunny : Icons.nightlight_round,
-                    ),
-                    title: const Text('Change Theme'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.of(context).pushNamed(ThemePage.routePath);
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.info),
-                    title: const Text('About'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      showAboutDialog(
-                        context: context,
-                        applicationName: SimplePhotosApp.appTitle,
-                        children: [
-                          const Text(
-                            'This app is a simple Flutter app that uses the Unsplash API to display photos.',
-                          ),
-                          AppSpacingWidgets.verticalSpacing8,
-                          const Text(
-                            'Made with ❤️ by ${AppConstants.authorName}',
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
+      drawer: AppDrawer(),
       body: CustomScrollView(
         slivers: [
           SliverAppBar.large(

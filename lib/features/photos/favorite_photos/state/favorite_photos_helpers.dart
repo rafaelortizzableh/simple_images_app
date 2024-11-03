@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../../core/core.dart';
 import '../../../features.dart';
@@ -14,6 +15,7 @@ abstract class FavoritePhotosHelpers {
   }) async {
     if (!favoritePhotos.contains(photo)) {
       unawaited(controller.addFavoritePhoto(photo));
+      HapticFeedback.mediumImpact().ignore();
       return;
     }
 
@@ -31,6 +33,7 @@ abstract class FavoritePhotosHelpers {
     required List<PhotoModel> favoritePhotos,
     required PhotoModel photo,
   }) async {
+    HapticFeedback.lightImpact().ignore();
     final shouldRemove = await showConfirmationDialog(
       context: context,
       content: 'Are you sure you want to remove this photo from favorites?',
@@ -40,6 +43,7 @@ abstract class FavoritePhotosHelpers {
     if (!shouldRemove) return;
     if (!context.mounted) return;
 
+    HapticFeedback.mediumImpact().ignore();
     unawaited(
       controller.removeFavoritePhoto(photo.id),
     );

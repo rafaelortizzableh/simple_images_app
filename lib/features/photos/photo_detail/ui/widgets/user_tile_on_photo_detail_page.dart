@@ -16,22 +16,20 @@ class UserTileOnPhotoDetailPage extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        SizedBox(
-          height: 37.0,
-          width: 37.0,
+        SizedBox.square(
+          dimension: 40.0,
           child: Hero(
             tag: photoAuthor.username,
             child: CircleAvatar(
               foregroundImage: NetworkImage(
                 photoAuthor.profilePicUrl ?? '',
               ),
-              radius: 37.0,
+              radius: 40.0,
             ),
           ),
         ),
-        const SizedBox(width: 8.0),
+        AppSpacingWidgets.horizontalSpacing8,
         SizedBox(
-          height: 37.0,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -39,16 +37,7 @@ class UserTileOnPhotoDetailPage extends StatelessWidget {
               Text(
                 photoAuthor.name ?? photoAuthor.username,
                 style: textTheme.titleMedium?.copyWith(
-                  fontSize: 12.0,
                   fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
-              ),
-              Text(
-                'View Profile',
-                style: textTheme.titleMedium?.copyWith(
-                  fontSize: 10.0,
-                  fontWeight: FontWeight.w300,
                   color: Colors.white,
                 ),
               ),

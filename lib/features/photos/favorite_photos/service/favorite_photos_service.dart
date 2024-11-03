@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/core.dart';
@@ -32,7 +33,7 @@ class SharedPreferencesFavoritePhotosService implements FavoritePhotosService {
     final favoritePhotos =
         favoritePhotosSet.map((photo) => photo.toJson()).toList();
 
-    await _sharedPreferencesService.save(_storageKey, favoritePhotos);
+    await _sharedPreferencesService.save(storageKey, favoritePhotos);
   }
 
   @override
@@ -42,13 +43,13 @@ class SharedPreferencesFavoritePhotosService implements FavoritePhotosService {
       return photo.toJson();
     }).toList();
 
-    await _sharedPreferencesService.save(_storageKey, favoritePhotos);
+    await _sharedPreferencesService.save(storageKey, favoritePhotos);
   }
 
   @override
   List<PhotoModel> getFavoritePhotos() {
     final favoritePhotosAsStrings = _sharedPreferencesService
-        .getListOfStringsFromSharedPreferences(_storageKey);
+        .getListOfStringsFromSharedPreferences(storageKey);
     if (favoritePhotosAsStrings == null) {
       return [];
     }
@@ -58,5 +59,6 @@ class SharedPreferencesFavoritePhotosService implements FavoritePhotosService {
     return photos;
   }
 
-  static const _storageKey = 'favorite_photos';
+  @visibleForTesting
+  static const storageKey = 'favorite_photos';
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/core.dart';
@@ -25,7 +26,8 @@ class SharedPreferencesPhotoSearchHistoryService
     required SharedPreferencesService sharedPreferencesService,
   }) : _sharedPreferencesService = sharedPreferencesService;
 
-  static const _storageKey = 'photo_search_history';
+  @visibleForTesting
+  static const storageKey = 'photo_search_history';
 
   @override
   Future<void> addSearchTerm({required String searchTerm}) async {
@@ -35,13 +37,13 @@ class SharedPreferencesPhotoSearchHistoryService
     };
     final searchTerms = searchTermsSet.toList();
 
-    await _sharedPreferencesService.save(_storageKey, searchTerms);
+    await _sharedPreferencesService.save(storageKey, searchTerms);
   }
 
   @override
   List<String> getPreviousSearchQueries() {
     final searchTerms = _sharedPreferencesService
-        .getListOfStringsFromSharedPreferences(_storageKey);
+        .getListOfStringsFromSharedPreferences(storageKey);
     if (searchTerms == null) {
       return [];
     }
@@ -53,6 +55,6 @@ class SharedPreferencesPhotoSearchHistoryService
     final searchTerms =
         getPreviousSearchQueries().where((term) => term != searchTerm).toList();
 
-    await _sharedPreferencesService.save(_storageKey, searchTerms);
+    await _sharedPreferencesService.save(storageKey, searchTerms);
   }
 }

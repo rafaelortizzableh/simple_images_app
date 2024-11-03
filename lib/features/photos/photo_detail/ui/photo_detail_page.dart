@@ -63,7 +63,7 @@ class _PhotoDetailPageState extends ConsumerState<PhotoDetailPage>
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
 
-    final photoAsyncValue = ref.watch(photoDetailProvider(
+    final photoAsyncValue = ref.watch(photoDetailsProvider(
       widget.photoId,
     ));
 
@@ -87,7 +87,7 @@ class _PhotoDetailPageState extends ConsumerState<PhotoDetailPage>
             error: (error, stackTrace) => GenericError(
               errorText: error.toString(),
               onRetry: () {
-                ref.invalidate(photoDetailProvider(widget.photoId));
+                ref.invalidate(photoDetailsProvider(widget.photoId));
               },
             ),
             data: (photo) => SizedBox.expand(

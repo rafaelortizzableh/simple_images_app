@@ -6,7 +6,7 @@ import '../../../features.dart';
 
 const _photoDetailTag = 'photo_detail';
 
-final photoDetailProvider =
+final photoDetailsProvider =
     FutureProvider.autoDispose.family<PhotoModel, String>(
   (ref, photoId) async {
     final photoService = ref.read(photosServiceProvider);

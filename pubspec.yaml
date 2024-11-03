@@ -22,15 +22,11 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  http_mock_adapter: ^0.6.1
   flutter_lints: ^4.0.0
 
 flutter:
   uses-material-design: true
-  # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
 
   fonts:
     - family: Raleway

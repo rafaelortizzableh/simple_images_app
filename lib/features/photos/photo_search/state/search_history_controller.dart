@@ -62,9 +62,8 @@ class SearchHistoryController extends StateNotifier<SearchHistoryState> {
       }
       state = state.copyWith(queryBeingRemoved: searchQuery);
       await _service.removeSearchTerm(searchTerm: searchQuery);
-      final newSearchQueries = state.searchQueries
-          .where((photo) => searchQuery != searchQuery)
-          .toList();
+      final newSearchQueries =
+          state.searchQueries.where((query) => query != searchQuery).toList();
       final newState = state
           .copyWith(searchQueries: newSearchQueries)
           .clearSearchQueryBeingRemoved();

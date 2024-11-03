@@ -15,10 +15,10 @@ The app uses `flutter_riverpod` for state management and dependency injection. I
 - Change preferred primary color
 
 ## Screenshots
-![sreenshot_1](https://github.com/user-attachments/assets/da3623f1-28da-4f05-abd2-25472d3c2f33)
-![sreenshot_2](https://github.com/user-attachments/assets/335c1645-c07d-4a4b-b25e-070380968be7)
-![sreenshot_3](https://github.com/user-attachments/assets/390bbee2-0a7a-4fa3-af7e-fce9562ccaeb)
-![sreenshot_4](https://github.com/user-attachments/assets/cc17e16e-81e8-4822-8231-26923d9fe8fd)
+![screenshot_1](https://github.com/user-attachments/assets/da3623f1-28da-4f05-abd2-25472d3c2f33)
+![screenshot_2](https://github.com/user-attachments/assets/25415a55-3b7d-42da-90b7-773654ebc259)
+![screenshot_3](https://github.com/user-attachments/assets/390bbee2-0a7a-4fa3-af7e-fce9562ccaeb)
+![screenshot_4](https://github.com/user-attachments/assets/cc17e16e-81e8-4822-8231-26923d9fe8fd)
 
 ## Getting Started
 1. Clone the repository

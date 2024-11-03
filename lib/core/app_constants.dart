@@ -7,6 +7,9 @@ abstract class AppConstants {
   /// The name of the author of the app.
   static const authorName = String.fromEnvironment('AUTHOR_NAME');
 
+  /// App Navigation Key
+  static final appNavigationKey = GlobalKey<NavigatorState>();
+
   // Colors
   static const primaryColor = Color(0xFF032541);
 

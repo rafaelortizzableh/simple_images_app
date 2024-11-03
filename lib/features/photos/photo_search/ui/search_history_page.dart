@@ -116,21 +116,26 @@ class _SearchHistoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverList.builder(
-      itemCount: searchQueries.length,
-      itemBuilder: (context, index) {
-        final searchQuery = searchQueries[index];
-        return ListTile(
-          title: Text(searchQuery),
-          onTap: () {
-            Navigator.of(context).pop(searchQuery);
-          },
-          trailing: IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () => onDeleted(searchQuery),
-          ),
-        );
-      },
+    return SliverPadding(
+      padding: const EdgeInsets.only(
+        bottom: AppConstants.spacing32,
+      ),
+      sliver: SliverList.builder(
+        itemCount: searchQueries.length,
+        itemBuilder: (context, index) {
+          final searchQuery = searchQueries[index];
+          return ListTile(
+            title: Text(searchQuery),
+            onTap: () {
+              Navigator.pop(context, searchQuery);
+            },
+            trailing: IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () => onDeleted(searchQuery),
+            ),
+          );
+        },
+      ),
     );
   }
 }

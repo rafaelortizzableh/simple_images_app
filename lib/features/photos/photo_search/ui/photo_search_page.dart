@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -185,29 +186,27 @@ class _PhotoSearchPageConsumerState extends ConsumerState<PhotoSearchPage> {
       _debounceTimer!.cancel();
     }
     _debounceTimer = Timer(
-      const Duration(milliseconds: 500),
+      const Duration(milliseconds: 750),
       () {
-        ref.read(photoSearchProvider.notifier).setQuery(searchQuery);
+        final controller = ref.read(photoSearchProvider.notifier);
+        final searchHistoryController =
+            ref.read(searchHistoryProvider.notifier);
+        final sanitizedQuery = searchQuery.trim();
+        if (sanitizedQuery.isEmpty) {
+          controller.clearSearchResults();
+          return;
+        }
+
+        searchHistoryController.addSearchQuery(sanitizedQuery);
+        controller.searchPhotos(
+          query: sanitizedQuery,
+          page: 1,
+        );
       },
     );
   }
 
   void _listenToQueryUpdatesAndRateLimitErrors() {
-    ref.listen<String>(
-      photoSearchProvider.select((value) => value.query),
-      (String? previous, String query) async {
-        final sanitizedQuery = query.trim();
-        if (sanitizedQuery.isEmpty) {
-          return;
-        }
-
-        ref.read(searchHistoryProvider.notifier).addSearchQuery(query);
-        ref.read(photoSearchProvider.notifier).searchPhotos(
-              query: sanitizedQuery,
-              page: 1,
-            );
-      },
-    );
     ref.listen<PhotoFailure?>(
       photoSearchProvider.select((value) => value.failure),
       (PhotoFailure? _, PhotoFailure? failure) {
@@ -226,13 +225,24 @@ class _PhotoSearchPageConsumerState extends ConsumerState<PhotoSearchPage> {
   }
 
   Future<void> _navigateToSearchHistoryPage() async {
-    final searchQuery =
-        await Navigator.of(context).pushNamed(SearchHistoryPage.routePath);
-
-    if (searchQuery is! String || searchQuery.isEmpty) {
-      return;
+    try {
+      // Push is used here instead of pushNamed to get the result from the page
+      // There's an issue with pushNamed that doesn't return the result.
+      // https://github.com/flutter/flutter/issues/57186
+      final searchQuery = await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const SearchHistoryPage(),
+        ),
+      );
+      if (searchQuery is! String) {
+        return;
+      }
+      if (searchQuery.isEmpty) {
+        return;
+      }
+      _searchController.text = searchQuery;
+    } catch (e) {
+      log('Error navigating to search history page: $e');
     }
-
-    _searchController.text = searchQuery;
   }
 }

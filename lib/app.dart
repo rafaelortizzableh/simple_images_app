@@ -23,6 +23,7 @@ class SimplePhotosApp extends ConsumerWidget {
       color: preferredColor,
       themeMode: themeMode,
       onGenerateRoute: generatePageRoute,
+      navigatorKey: AppConstants.appNavigationKey,
     );
   }
 }

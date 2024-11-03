@@ -39,6 +39,7 @@ class PhotoSearchController extends StateNotifier<PhotoSearchState> {
 
     try {
       final pageToFetch = page ?? state.page;
+      if (!mounted) return;
       state = state.copyWith(
         isLoading: pageToFetch == 1,
         failure: null,
@@ -49,6 +50,7 @@ class PhotoSearchController extends StateNotifier<PhotoSearchState> {
         query: query,
         page: pageToFetch,
       );
+      if (!mounted) return;
       state = state.copyWith(
         photos: {...state.photos, ...photos}.toList(),
         page: pageToFetch + 1,
@@ -70,6 +72,7 @@ class PhotoSearchController extends StateNotifier<PhotoSearchState> {
         tag: _tag,
       );
 
+      if (!mounted) return;
       state = state.copyWith(failure: e);
     } catch (e, stackTrace) {
       _errorReportingService.recordError(
@@ -78,16 +81,20 @@ class PhotoSearchController extends StateNotifier<PhotoSearchState> {
         tag: _tag,
       );
 
+      if (!mounted) return;
       state = state.copyWith(
         isLoading: false,
         failure: const PhotoFailure(type: PhotoFailureType.unknown),
       );
     } finally {
-      state = state.copyWith(isLoading: false, isLoadingMore: false);
+      if (mounted) {
+        state = state.copyWith(isLoading: false, isLoadingMore: false);
+      }
     }
   }
 
-  void setQuery(String query) {
-    state = state.copyWith(query: query);
+  void clearSearchResults() {
+    if (!mounted) return;
+    state = state.copyWith(photos: [], page: 1, hasMore: true);
   }
 }

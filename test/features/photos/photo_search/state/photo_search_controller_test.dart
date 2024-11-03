@@ -230,5 +230,44 @@ void main() {
         isA<PhotoFailure>(),
       );
     });
+
+    // Should Reset state when clearSearch is called
+    test('clearSearch should reset the state', () async {
+      // Given
+      const service = MockPhotoService(
+        photosToReturn: [
+          samplePhotoModel,
+        ],
+      );
+
+      final container = ProviderContainer(
+        overrides: [
+          photosServiceProvider.overrideWithValue(service),
+          errorReportingServiceProvider.overrideWithValue(
+            LocalLoggingErrorReportingService(),
+          ),
+        ],
+      );
+
+      addTearDown(container.dispose);
+
+      final controller = container.read(photoSearchProvider.notifier);
+
+      await controller.searchPhotos(query: 'Nature');
+
+      final subscription =
+          container.listen<PhotoSearchState>(photoSearchProvider, (_, __) {});
+
+      // When
+      controller.clearSearchResults();
+
+      // Then
+      final state = subscription.read();
+
+      expect(
+        state,
+        const PhotoSearchState(),
+      );
+    });
   });
 }

@@ -66,12 +66,17 @@ class _PhotoSearchPageConsumerState extends ConsumerState<PhotoSearchPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            CupertinoSearchTextField(
-              controller: _searchController,
-              style: TextStyle(
-                color: context.theme.brightness == Brightness.light
-                    ? Colors.black
-                    : Colors.white,
+            Hero(
+              tag: 'search_photos_bar',
+              child: CupertinoSearchTextField(
+                placeholder: 'Search for photos',
+                autofocus: true,
+                controller: _searchController,
+                style: TextStyle(
+                  color: context.theme.brightness == Brightness.light
+                      ? Colors.black
+                      : Colors.white,
+                ),
               ),
             ),
             if (hasFailure) ...{

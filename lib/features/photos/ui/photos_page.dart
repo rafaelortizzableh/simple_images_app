@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -30,7 +31,7 @@ class PhotosPage extends ConsumerWidget {
         toolbarHeight: 0,
         automaticallyImplyLeading: false,
       ),
-      drawer: AppDrawer(),
+      drawer: const AppDrawer(),
       body: CustomScrollView(
         slivers: [
           SliverAppBar.large(
@@ -73,10 +74,30 @@ class PhotosPage extends ConsumerWidget {
             ),
           } else ...{
             SliverPadding(
+              padding: AppConstants.padding16,
+              sliver: SliverList.list(
+                children: [
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () => _navigateToSearchPage(context),
+                    child: const Hero(
+                      tag: 'search_photos_bar',
+                      child: CupertinoSearchTextField(
+                        autofocus: false,
+                        enabled: false,
+                        placeholder: 'Search photos',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SliverPadding(
               padding: const EdgeInsets.only(
-                top: AppConstants.spacing32,
-                right: AppConstants.spacing24,
-                left: AppConstants.spacing24,
+                top: AppConstants.spacing16,
+                right: AppConstants.spacing16,
+                left: AppConstants.spacing16,
+                bottom: AppConstants.spacing32,
               ),
               sliver: SliverGrid(
                 delegate: SliverChildBuilderDelegate(

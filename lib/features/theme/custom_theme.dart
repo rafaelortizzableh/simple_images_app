@@ -20,10 +20,13 @@ class CustomTheme {
 
   static const errorRed = Colors.red;
 
+  static const _raleWay = 'Raleway';
+
   ThemeData darkTheme(
     MaterialColor primaryColor,
   ) {
     final defaultTheme = ThemeData.dark();
+    final textTheme = defaultTheme.primaryTextTheme;
     final foregroundColor =
         primaryColor.computeLuminance() > 0.5 ? Colors.black : Colors.white;
 
@@ -71,6 +74,29 @@ class CustomTheme {
         ),
       ),
       useMaterial3: true,
+      textTheme: defaultTheme.primaryTextTheme
+          .copyWith(
+            displayMedium: textTheme.displayMedium?.copyWith(
+              fontSize: 42.0,
+            ),
+            titleMedium: textTheme.titleMedium?.copyWith(
+              fontSize: 22.0,
+              fontWeight: FontWeight.w500,
+            ),
+            bodyLarge: textTheme.titleMedium?.copyWith(
+              fontSize: 15.0,
+              fontWeight: FontWeight.w400,
+            ),
+            bodyMedium: textTheme.titleMedium?.copyWith(
+              fontSize: 13.0,
+              fontWeight: FontWeight.w300,
+            ),
+          )
+          .apply(
+            fontFamily: _raleWay,
+            bodyColor: Colors.white,
+            displayColor: Colors.white,
+          ),
     );
   }
 
@@ -83,6 +109,7 @@ class CustomTheme {
         ? SystemUiOverlayStyle.dark
         : SystemUiOverlayStyle.light;
     final defaultTheme = ThemeData.light();
+    final textTheme = defaultTheme.primaryTextTheme;
 
     return ThemeData(
       extensions: [
@@ -120,6 +147,29 @@ class CustomTheme {
         ),
       ),
       useMaterial3: true,
+      textTheme: defaultTheme.primaryTextTheme
+          .copyWith(
+            displayMedium: textTheme.displayMedium?.copyWith(
+              fontSize: 42.0,
+            ),
+            titleMedium: textTheme.titleMedium?.copyWith(
+              fontSize: 22.0,
+              fontWeight: FontWeight.w500,
+            ),
+            bodyLarge: textTheme.titleMedium?.copyWith(
+              fontSize: 16.0,
+              fontWeight: FontWeight.w400,
+            ),
+            bodyMedium: textTheme.titleMedium?.copyWith(
+              fontSize: 14.0,
+              fontWeight: FontWeight.w300,
+            ),
+          )
+          .apply(
+            fontFamily: _raleWay,
+            bodyColor: Colors.black,
+            displayColor: Colors.black,
+          ),
     );
   }
 }

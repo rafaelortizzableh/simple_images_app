@@ -31,7 +31,12 @@ abstract class FavoritePhotosHelpers {
     required List<PhotoModel> favoritePhotos,
     required PhotoModel photo,
   }) async {
-    final shouldRemove = await showConfirmationDialog(context: context);
+    final shouldRemove = await showConfirmationDialog(
+      context: context,
+      content: 'Are you sure you want to remove this photo from favorites?',
+      title: 'Remove from favorites',
+      rightButtonText: 'Remove',
+    );
     if (!shouldRemove) return;
     if (!context.mounted) return;
 

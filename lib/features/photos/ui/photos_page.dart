@@ -12,6 +12,7 @@ class PhotosPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
     final photos = ref.watch(
       photosProvider.select((value) => value.photos),
     );
@@ -29,66 +30,78 @@ class PhotosPage extends ConsumerWidget {
     );
 
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 0,
+        automaticallyImplyLeading: false,
+      ),
       drawer: Drawer(
-          child: StatusBarWrapper(
-        statusBarStyle:
-            isLightTheme ? StatusBarStyle.dark : StatusBarStyle.light,
-        child: SafeArea(
-          child: Padding(
-            padding: AppConstants.padding24,
-            child: Column(
-              children: [
-                ListTile(
-                  leading: Icon(
-                    isLightTheme ? Icons.sunny : Icons.nightlight_round,
+        child: StatusBarWrapper(
+          statusBarStyle:
+              isLightTheme ? StatusBarStyle.dark : StatusBarStyle.light,
+          child: SafeArea(
+            child: Padding(
+              padding: AppConstants.padding24,
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: Icon(
+                      isLightTheme ? Icons.sunny : Icons.nightlight_round,
+                    ),
+                    title: const Text('Change Theme'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.of(context).pushNamed(ThemePage.routePath);
+                    },
                   ),
-                  title: const Text('Change Theme'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.of(context).pushNamed(ThemePage.routePath);
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.info),
-                  title: const Text('About'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    showAboutDialog(
-                      context: context,
-                      applicationName: SimplePhotosApp.appTitle,
-                      children: [
-                        const Text(
-                          'This app is a simple Flutter app that uses the Unsplash API to display photos.',
-                        ),
-                        AppSpacingWidgets.verticalSpacing8,
-                        const Text(
-                          'Made with ❤️ by ${AppConstants.authorName}',
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ],
+                  ListTile(
+                    leading: const Icon(Icons.info),
+                    title: const Text('About'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      showAboutDialog(
+                        context: context,
+                        applicationName: SimplePhotosApp.appTitle,
+                        children: [
+                          const Text(
+                            'This app is a simple Flutter app that uses the Unsplash API to display photos.',
+                          ),
+                          AppSpacingWidgets.verticalSpacing8,
+                          const Text(
+                            'Made with ❤️ by ${AppConstants.authorName}',
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      )),
-      appBar: AppBar(
-        title: const Text('Photos'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () => _navigateToSearchPage(context),
-          ),
-          IconButton(
-            icon: const Icon(Icons.favorite),
-            onPressed: () => _navigateToFavoritesPage(context),
-          ),
-        ],
       ),
       body: CustomScrollView(
         slivers: [
+          SliverAppBar.large(
+            centerTitle: true,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () => _navigateToSearchPage(context),
+              ),
+              IconButton(
+                icon: const Icon(Icons.favorite),
+                onPressed: () => _navigateToFavoritesPage(context),
+              ),
+            ],
+            title: Text(
+              'Photos',
+              textAlign: TextAlign.center,
+              style: theme.textTheme.headlineSmall?.copyWith(
+                color: theme.foregroundColor,
+              ),
+            ),
+          ),
           if (isLoading) ...{
             const SliverFillRemaining(
               child: Center(

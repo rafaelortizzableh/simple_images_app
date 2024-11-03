@@ -13,16 +13,33 @@ class SearchHistoryPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
     final previousSearchQueries = ref.watch(
       searchHistoryProvider.select((value) => value.searchQueries),
     );
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Search History'),
+        toolbarHeight: 0,
+        automaticallyImplyLeading: false,
       ),
-      body: previousSearchQueries.isEmpty
-          ? const _EmptySearchHistory()
-          : _SearchHistoryList(
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar.large(
+            centerTitle: true,
+            title: Text(
+              'Search History',
+              textAlign: TextAlign.center,
+              style: theme.textTheme.headlineSmall?.copyWith(
+                color: theme.foregroundColor,
+              ),
+            ),
+          ),
+          if (previousSearchQueries.isEmpty) ...{
+            const SliverFillRemaining(
+              child: _EmptySearchHistory(),
+            ),
+          } else ...{
+            _SearchHistoryList(
               searchQueries: previousSearchQueries,
               onDeleted: (searchQuery) {
                 _deletePreviousSearchQueryIfNeeded(
@@ -33,6 +50,9 @@ class SearchHistoryPage extends ConsumerWidget {
                 );
               },
             ),
+          },
+        ],
+      ),
     );
   }
 
@@ -41,7 +61,13 @@ class SearchHistoryPage extends ConsumerWidget {
     required SearchHistoryController searchHistoryController,
     required String searchQuery,
   }) async {
-    final shouldDelete = await showConfirmationDialog(context: context);
+    final shouldDelete = await showConfirmationDialog(
+      context: context,
+      content:
+          'Are you sure you want to delete this query from your search history?',
+      title: 'Delete search query',
+      rightButtonText: 'Delete',
+    );
     if (!shouldDelete) return;
     if (!context.mounted) return;
     unawaited(
@@ -90,7 +116,7 @@ class _SearchHistoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return SliverList.builder(
       itemCount: searchQueries.length,
       itemBuilder: (context, index) {
         final searchQuery = searchQueries[index];

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../core.dart';
+
 class GenericDialog extends StatelessWidget {
   const GenericDialog({
     super.key,
@@ -15,7 +17,7 @@ class GenericDialog extends StatelessWidget {
   final String content;
 
   /// If this is null,
-  /// will be context.l10n.okay
+  /// will be 'Okay' by default
   final String? rightButtonText;
   final String? leftButtonText;
   final VoidCallback? leftButtonCallBack;
@@ -25,16 +27,32 @@ class GenericDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = context.textTheme;
+    final leftButtonText = this.leftButtonText;
+    final title = this.title;
+    final isLeftButtonVisible =
+        leftButtonText != null && leftButtonCallBack != null;
+
     return AlertDialog(
-      title: title != null ? Text(title!) : const SizedBox(),
-      content: Text(content),
+      title: title != null
+          ? Text(
+              title,
+              style: textTheme.headlineSmall,
+            )
+          : null,
+      content: Text(
+        content,
+        style: textTheme.bodyLarge,
+      ),
       actions: [
-        leftButtonText != null && leftButtonCallBack != null
-            ? TextButton(
-                onPressed: leftButtonCallBack,
-                child: Text(leftButtonText!),
-              )
-            : const SizedBox(),
+        if (isLeftButtonVisible) ...{
+          TextButton(
+            onPressed: leftButtonCallBack,
+            child: Text(leftButtonText),
+          ),
+        } else ...{
+          const SizedBox(),
+        },
         TextButton(
           onPressed: rightButtonCallBack ?? () => Navigator.pop(context),
           child: Text(
@@ -48,6 +66,7 @@ class GenericDialog extends StatelessWidget {
 
 Future<bool> showConfirmationDialog({
   required BuildContext context,
+  String? title,
   String? rightButtonText,
   String? leftButtonText,
   String? content,
@@ -55,6 +74,7 @@ Future<bool> showConfirmationDialog({
   final result = await showDialog(
     context: context,
     builder: (context) => GenericDialog(
+      title: title,
       content: content ?? 'Are you sure?',
       leftButtonText: leftButtonText ?? 'Cancel',
       leftButtonCallBack: () {

@@ -17,6 +17,10 @@ class ThemePage extends ConsumerWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 0,
+        automaticallyImplyLeading: false,
+      ),
       body: CustomScrollView(
         slivers: [
           SliverAppBar.large(
@@ -42,7 +46,11 @@ class ThemePage extends ConsumerWidget {
             ),
           ),
           SliverPadding(
-            padding: AppConstants.padding8,
+            padding: const EdgeInsets.only(
+              left: AppConstants.spacing16,
+              right: AppConstants.spacing16,
+              top: AppConstants.spacing12,
+            ),
             sliver: SliverToBoxAdapter(
               child: Text(
                 'Theme Mode',
@@ -73,7 +81,10 @@ class ThemePage extends ConsumerWidget {
             ),
           ),
           SliverPadding(
-            padding: AppConstants.padding8,
+            padding: const EdgeInsets.only(
+              left: AppConstants.spacing16,
+              right: AppConstants.spacing16,
+            ),
             sliver: SliverToBoxAdapter(
               child: Text(
                 'Preferred Color',
@@ -243,10 +254,10 @@ class ThemeModeCard extends StatelessWidget {
                               ),
                               color: preferredColor.withOpacity(0.75),
                             ),
-                            child: const Center(
+                            child: Center(
                               child: Icon(
                                 Icons.smartphone,
-                                color: Colors.white,
+                                color: theme.foregroundColor,
                                 size: AppConstants.spacing48,
                               ),
                             ),

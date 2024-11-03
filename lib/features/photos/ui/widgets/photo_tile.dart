@@ -19,11 +19,14 @@ class PhotoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final animationDuration =
         !isRightSide ? const Duration(seconds: 2) : const Duration(seconds: 1);
+
     return Padding(
       padding: EdgeInsets.only(
-        top: isRightSide ? 26.0 : 0,
+        top: isRightSide ? AppConstants.spacing8 : 0,
+        bottom: isRightSide ? 0 : AppConstants.spacing8,
       ),
       child: GestureDetector(
         onTap: () {
@@ -32,8 +35,17 @@ class PhotoItem extends StatelessWidget {
             arguments: photo.id,
           );
         },
-        child: ClipRRect(
-          borderRadius: AppConstants.borderRadius12,
+        child: Card(
+          elevation: isRightSide ? 3 : 2,
+          shape: const RoundedRectangleBorder(
+            borderRadius: AppConstants.borderRadius12,
+          ),
+          borderOnForeground: false,
+          shadowColor: theme.brightness == Brightness.light
+              ? theme.foregroundColor.withOpacity(0.5)
+              : theme.scaffoldBackgroundColor.withOpacity(0.5),
+          color: Colors.transparent.withOpacity(0),
+          margin: const EdgeInsets.all(0),
           child: Stack(
             alignment: Alignment.bottomCenter,
             children: [

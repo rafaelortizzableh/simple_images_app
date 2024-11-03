@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter/material.dart';
 
+import '../core.dart';
+
 class CloseFullPageButton extends StatelessWidget {
   const CloseFullPageButton({
     super.key,
@@ -14,7 +16,7 @@ class CloseFullPageButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      iconSize: 37.0,
+      iconSize: AppConstants.spacing32,
       color: color,
       onPressed: () {
         if (onClose != null) onClose!();

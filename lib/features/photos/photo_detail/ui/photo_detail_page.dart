@@ -202,9 +202,14 @@ class _PhotoDetailPageState extends ConsumerState<PhotoDetailPage>
                     ],
                   ),
                   const Positioned(
-                    top: 59.0,
-                    left: 26.0,
+                    top: AppConstants.spacing24 + kToolbarHeight,
+                    left: AppConstants.spacing24,
                     child: CloseFullPageButton(color: Colors.white),
+                  ),
+                  Positioned(
+                    top: AppConstants.spacing24 + kToolbarHeight,
+                    right: AppConstants.spacing24,
+                    child: _PhotoDetailFavoriteButton(photo: photo),
                   ),
                 ],
               ),
@@ -212,6 +217,43 @@ class _PhotoDetailPageState extends ConsumerState<PhotoDetailPage>
           ),
         ),
       ),
+    );
+  }
+}
+
+class _PhotoDetailFavoriteButton extends ConsumerWidget {
+  const _PhotoDetailFavoriteButton({
+    required this.photo,
+    // ignore: unused_element
+    super.key,
+  });
+  final PhotoModel photo;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isFavoritePhoto = ref.watch(
+      favoritePhotosProvider.select(
+        (value) => value.favoritePhotoIds.contains(photo.id),
+      ),
+    );
+    return IconButton(
+      iconSize: AppConstants.spacing32,
+      icon: Icon(
+        isFavoritePhoto ? Icons.favorite : Icons.favorite_border,
+        color: Colors.white,
+      ),
+      onPressed: () {
+        _toggleAsFavorite(ref, context);
+      },
+    );
+  }
+
+  void _toggleAsFavorite(WidgetRef ref, BuildContext context) {
+    FavoritePhotosHelpers.toggleFavoritePhoto(
+      photo: photo,
+      controller: ref.read(favoritePhotosProvider.notifier),
+      context: context,
+      favoritePhotos: ref.read(favoritePhotosProvider).favoritePhotos,
     );
   }
 }

@@ -18,7 +18,9 @@ The app uses `flutter_riverpod` for state management and dependency injection. I
 ![screenshot_1](https://github.com/user-attachments/assets/da3623f1-28da-4f05-abd2-25472d3c2f33)
 ![screenshot_2](https://github.com/user-attachments/assets/212a65bc-d99a-45de-a3c1-6e12361eb79f)
 ![screenshot_3](https://github.com/user-attachments/assets/390bbee2-0a7a-4fa3-af7e-fce9562ccaeb)
-![screenshot_4](https://github.com/user-attachments/assets/cc17e16e-81e8-4822-8231-26923d9fe8fd)
+![screenshot_4](https://github.com/user-attachments/assets/dc0e69b4-be6d-465d-998d-3b1e11f8d61f)
+
+
 
 ## Getting Started
 1. Clone the repository

@@ -35,6 +35,6 @@ flutter pub get
 ```
 4. Run the app on a connected device or emulator. You need an API key from Unsplash to fetch images. It's set on `--dart-define=UNSPLASH_API=[YOUR_KEY]` when running the app. Optionally you can set the author name as an environment variable with `--dart-define=AUTHOR_NAME=Rafa Ortiz`. The original author name is Rafa Ortiz.
 ```bash
-flutter run -- 
+flutter run --dart-define=UNSPLASH_API=[YOUR_KEY]--dart-define=AUTHOR_NAME="Rafa Ortiz"
 ```
 5. Enjoy the app!
